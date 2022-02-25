@@ -9,10 +9,12 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 import random, time
 from sys import exit
+from datetime import datetime
 
 sugang_id = ''
 sugang_pw = ''
 target_list = []
+degree = ''
 
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome('chromedriver', chrome_options=options)
@@ -56,6 +58,15 @@ def sugang_page_login():
         print('수강신청 페이지 로그인 실패')
         exit(1)
 
+def get_degree_course():
+    driver.switch_to.default_content()
+    frame = driver.find_element_by_xpath('/html/body/iframe')
+    driver.switch_to.frame(frame)
+    
+    global degree
+    name = driver.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[4]/td').text
+    degree = driver.find_element_by_xpath('/html/body/div[1]/table/tbody/tr[6]/td').text
+    print('{} 학생 - {} 과정'.format(name, degree))
 
 def move_to_sugang_tab():
     try:
@@ -97,7 +108,7 @@ def check_available():
         for td in tr.find_elements_by_tag_name('td'):
             tr_data.append(td.text)
         subject_data.append(tr_data)
-        
+    
     for data in subject_data:
         if data[2] not in target_list:
             continue
@@ -107,23 +118,26 @@ def check_available():
         exit(1)
     
     # find target
-    # 전공과목 티오 기준임. (교양은 인덱스 수정 필요)
-    print('---- 신청 가능한 과목 ----')
+    # 총 합계 인원수 기준으로 판별
+    print('\n--------- 수강신청 가능여부 ---------')
+    print('{} 현재'.format(datetime.now()))
     target_idx = []
     for idx, data in enumerate(subject_data):
         if data[1] == '신청완료' or data[2] not in target_list:
             continue
-        regist_num = int(data[8].split('/')[0])
-        wait_num = int(data[8].split('/')[1])
+        regist_num = int(data[15].split('/')[0])
+        wait_num = int(data[15].split('/')[1])
         if regist_num < wait_num:
             target_idx.append(idx)
             print('{}번째 과목 - {}'.format(str(idx+1), data[3]))
-    print('-------------------------')
+        else:
+            print('[{}({}/{})] 수강신청 불가'.format(data[3], regist_num, wait_num))
+    print('------------------------------------\n')
 
     return target_idx
 
 def register(subjects_idx):
-    
+
     for idx in subjects_idx:
         try:
             driver.switch_to.default_content()
@@ -135,8 +149,11 @@ def register(subjects_idx):
             driver.switch_to.frame(frame)
         except Exception:
             print('수강신청 목록 찾기 실패')
-            
-        driver.find_element_by_xpath('//*[@id="{}"]/td[2]/input[1]'.format(idx+1)).click()
+
+        if degree == '학사':
+            driver.find_element_by_xpath('//*[@id="{}"]/td[2]/span'.format(idx+1)).click()
+        else:   # 석사/박사
+            driver.find_element_by_xpath('//*[@id="{}"]/td[2]/input[1]'.format(idx+1)).click()
         time.sleep(3)
         # repeat process
         move_to_sugang_tab()

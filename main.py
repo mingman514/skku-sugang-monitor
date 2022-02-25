@@ -1,14 +1,13 @@
 from sugang_utils import *
-from datetime import datetime
 
 # 경로 설정에 따라 chromedriver.exe 파일이 같은 폴더 내에 있어야 함.
 """
 To Fill Out
 """
-Student_ID = '2019311918'
-Password = 'dogers61!'
+Student_ID = '2021XXXXXX'
+Password = 'p@ssw0rd'
 # 대상 전공과목 (학수번호-분반) 입력 - ex. 'SUP5003-41'
-Target_List = ['SWE3002-42', 'SWE3047-42']
+Target_List = ['SWE3002-42', 'SWE3047-42', 'SWE3047-43']
 
 # 신청기간
 Start_Date = datetime.strptime('2022-02-22 08:00','%Y-%m-%d %H:%M')
@@ -36,6 +35,8 @@ if __name__ == '__main__':
     access_to_webpage()
     # login
     sugang_page_login()
+    # get degree course
+    get_degree_course()
     # move to 수강신청 tab == refresh
     move_to_sugang_tab()
     
