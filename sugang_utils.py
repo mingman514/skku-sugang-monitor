@@ -109,13 +109,15 @@ def check_available():
             tr_data.append(td.text)
         subject_data.append(tr_data)
     
+    cnt = 0
     for data in subject_data:
         if data[2] not in target_list:
             continue
-        elif data[1] != '신청완료':
-            break
-        print('모든 목표 과목에 대한 수강신청 완료!')
-        exit(1)
+        elif data[1] == '신청완료':
+            cnt += 1
+        if cnt == len(target_list):
+            print('모든 목표 과목에 대한 수강신청 완료!')
+            exit(1)
     
     # find target
     # 총 합계 인원수 기준으로 판별
