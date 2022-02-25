@@ -36,13 +36,15 @@ if __name__ == '__main__':
     access_to_webpage()
     # login
     sugang_page_login()
-    # move to 수강신청 tab
-    move_to_sugang_tab()
+    
     # check availability & register
     while True:
         # 수강신청 가능시간대 벗어나면 종료
         if is_register_period():
             available_subjects = check_available()
+
+            # move to 수강신청 tab == refresh
+            move_to_sugang_tab()
 
             if len(available_subjects) > 0:
                 register(available_subjects)
