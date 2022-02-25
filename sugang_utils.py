@@ -136,7 +136,7 @@ def register(subjects_idx):
         except Exception:
             print('수강신청 목록 찾기 실패')
             
-        driver.find_element_by_xpath('//*[@id="{}"]/td[2]/input[2]'.format(idx+1)).click()
+        driver.find_element_by_xpath('//*[@id="{}"]/td[2]/input[1]'.format(idx+1)).click()
         time.sleep(3)
         # repeat process
         move_to_sugang_tab()

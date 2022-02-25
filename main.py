@@ -5,8 +5,8 @@ from datetime import datetime
 """
 To Fill Out
 """
-Student_ID = '2021712971'
-Password = 'esteban514!'
+Student_ID = '2021XXXXXX'
+Password = 'p@ssw0rd'
 # 대상 전공과목 (학수번호-분반) 입력 - ex. 'SUP5003-41'
 Target_List = ['SUP5003-41', 'ADS5030-01']
 
