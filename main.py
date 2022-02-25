@@ -5,10 +5,10 @@ from datetime import datetime
 """
 To Fill Out
 """
-Student_ID = '2021XXXXXX'
-Password = 'p@ssw0rd'
+Student_ID = '2019311918'
+Password = 'dogers61!'
 # 대상 전공과목 (학수번호-분반) 입력 - ex. 'SUP5003-41'
-Target_List = ['SUP5003-41', 'ADS5030-01']
+Target_List = ['SWE3002-42', 'SWE3047-42']
 
 # 신청기간
 Start_Date = datetime.strptime('2022-02-22 08:00','%Y-%m-%d %H:%M')
@@ -36,6 +36,8 @@ if __name__ == '__main__':
     access_to_webpage()
     # login
     sugang_page_login()
+    # move to 수강신청 tab == refresh
+    move_to_sugang_tab()
     
     # check availability & register
     while True:
@@ -43,15 +45,13 @@ if __name__ == '__main__':
         if is_register_period():
             available_subjects = check_available()
 
-            # move to 수강신청 tab == refresh
-            move_to_sugang_tab()
-
             if len(available_subjects) > 0:
                 register(available_subjects)
 
             wait_time = 60 * random.uniform(At_Least, At_Most)
             print('{}초 대기 후에 모니터링 재개'.format(round(wait_time, 2)))
             time.sleep(wait_time)
+            move_to_sugang_tab()
 
         else:
             print('신청 기간이 아니므로 종료')
